@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">BeerManager</string>
+    <string name="nav_beer">Beer</string>
+    <string name="nav_players">Players</string>
+    <string name="nav_ticket">Ticket</string>
+    <string name="nav_logs">Logs</string>
+    <string name="lbl_name">Name</string>
+    <string name="lbl_playerType">Type</string>
+    <string name="add_player">Add player</string>
+    <string name="full_name">Full Name</string>
+    <string name="player">Player</string>
+    <string name="manager">Manager</string>
+    <string name="manager_explaination">Managers can increase or decrease beer totals for each team member.</string>
+    <string name="cancel">Cancel</string>
+    <string name="str_owner">Owner</string>
+    <string name="str_owner_explaination"><b>Owner:</b> An owner may do all tasks including adding and removing managers. There can only be one owner at a time..</string>
+    <string name="str_manager_explaination"><b>Manager:</b> A manager may process ticket purchases and manage beer sales.</string>
+    <string name="str_player_explaination"><b>Player:</b> A player may not execute any tasks. They are simple someone on your team that drinks beers.</string>
+
+    <string-array name="players">
+        <item>Alex Anspikian</item>
+        <item>Donald Walker</item>
+        <item>Eric Gagne</item>
+        <item>Dominic Allard</item>
+    </string-array>
+
+    <string-array name="types">
+        <item>Manager</item>
+        <item>Player</item>
+        <item>Manager</item>
+        <item>Player</item>
+    </string-array>
+
+
+</resources>
