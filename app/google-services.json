@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1032758388067",
+    "firebase_url": "https://beermanager-652ac.firebaseio.com",
+    "project_id": "beermanager-652ac",
+    "storage_bucket": "beermanager-652ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032758388067:android:d69b245a08ee1e8cab9f56",
+        "android_client_info": {
+          "package_name": "com.example.beermanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1032758388067-5aeca0ud8lq53okf49satpcg1bnp0n3a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJ414xdf9kENbFjvXCKttuVKv65Y_w0vQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032758388067-5aeca0ud8lq53okf49satpcg1bnp0n3a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
