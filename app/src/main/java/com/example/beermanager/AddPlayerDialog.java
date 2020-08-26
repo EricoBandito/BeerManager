@@ -46,7 +46,7 @@ public class AddPlayerDialog extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Player newPlayer = createPlayer();
-                        addPlayer(newPlayer.playerName,newPlayer.playerType);
+                        addPlayertoDatabase(newPlayer);
                     }
                 });
 
@@ -63,14 +63,13 @@ public class AddPlayerDialog extends AppCompatDialogFragment {
 
         return new Player(playerName, playerType);
     }
-    private void addPlayer(String playerName, String playerType)
+
+    private void addPlayertoDatabase(Player player)
     {
-        Player newPlayer = new Player(playerName, playerType);
 
         database = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference usersRef = database.child("users");
-        usersRef.push().setValue(newPlayer);
-
-
+        //TODO Reference the correct team when entering into database.
+        DatabaseReference membersRef = database.child("teams").child("jets").child("members");
+        membersRef.push().setValue(player);
     }
 }
