@@ -1,22 +1,21 @@
 package com.example.beermanager.Classes;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.example.beermanager.R;
 
-import static android.app.AlertDialog.THEME_HOLO_LIGHT;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDialogFragment;
+
 
 public class EditPlayerDialog extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity(), THEME_HOLO_LIGHT);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 //        Change "add_player_dialog" name.
         View view = inflater.inflate(R.layout.add_player_dialog, null);

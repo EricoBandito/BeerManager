@@ -3,10 +3,10 @@ package com.example.beermanager;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import androidx.appcompat.app.AppCompatDialogFragment;
 
 public class PlayerTypeInfoDialog extends AppCompatDialogFragment {
     @Override
