@@ -9,6 +9,11 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.example.beermanager.Classes.Player;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -19,12 +24,14 @@ public class AddPlayerDialog extends AppCompatDialogFragment {
 
     private EditText editTextName;
     private RadioGroup radioGroup;
+    private DatabaseReference database;
+    private View view;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.add_player_dialog, null);
+        view = inflater.inflate(R.layout.add_player_dialog, null);
 
         dialogBuilder
                 .setView(view)
@@ -38,24 +45,32 @@ public class AddPlayerDialog extends AppCompatDialogFragment {
                 .setPositiveButton("Add Player", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
-
-                        int selectedRadioId = radioGroup.getCheckedRadioButtonId();
-                        RadioButton selectedRadioButton = getActivity().findViewById(selectedRadioId);
-
-                        String playerName = editTextName.getText().toString();
-                        String playerType = "Manager";
-
-                        addPlayer(playerName,playerType);
+                        Player newPlayer = createPlayer();
+                        addPlayer(newPlayer.playerName,newPlayer.playerType);
                     }
                 });
 
         return  dialogBuilder.create();
     }
 
+    private Player createPlayer(){
+        radioGroup = view.findViewById(R.id.radioGroup);
+        int selectedRadioId = radioGroup.getCheckedRadioButtonId();
+        RadioButton selectedRadioButton = view.findViewById(selectedRadioId);
+        editTextName = view.findViewById(R.id.et_name);
+        String playerName = editTextName.getText().toString();
+        String playerType = selectedRadioButton.getText().toString();
 
+        return new Player(playerName, playerType);
+    }
     private void addPlayer(String playerName, String playerType)
     {
-        
+        Player newPlayer = new Player(playerName, playerType);
+
+        database = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference usersRef = database.child("users");
+        usersRef.push().setValue(newPlayer);
+
+
     }
 }
