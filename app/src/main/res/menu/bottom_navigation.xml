@@ -16,4 +16,8 @@
         android:id="@+id/nav_logs"
         android:icon="@drawable/ic_logs"
         android:title="@string/nav_logs"/>
+    <item
+        android:id="@+id/nav_test"
+        android:icon="@drawable/ic_test"
+        android:title="Test Fragment"/>
 </menu>
