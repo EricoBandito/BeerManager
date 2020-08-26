@@ -1,5 +1,6 @@
 package com.example.beermanager;
 
+import android.content.Context;
 import android.os.Bundle;
 import org.jetbrains.annotations.Nullable;
 import androidx.annotation.NonNull;
@@ -14,19 +15,29 @@ import android.widget.ImageView;
 
 import com.example.beermanager.Adapters.PlayerLIstAdapter;
 import com.example.beermanager.Classes.EditPlayerDialog;
+import com.example.beermanager.Classes.Player;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class PlayersFragment extends Fragment {
     private Button addPlayerButton;
     private Button tempEditPlayerButton;
     RecyclerView recyclerView;
-    String playerNames[], playerTypes[];
+    private ArrayList<Player> playersList;
+    private DatabaseReference database;
+    private   PlayerLIstAdapter adapter;
+    private Context context;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View playersLayout = inflater.inflate(R.layout.fragment_players,container,false);
-        playerNames = getResources().getStringArray(R.array.players);
-        playerTypes = getResources().getStringArray(R.array.types);
 
         ImageView typeInfo = playersLayout.findViewById(R.id.img_type_info);
         typeInfo.setOnClickListener(new View.OnClickListener() {
@@ -36,7 +47,6 @@ public class PlayersFragment extends Fragment {
             }
         });
 
-
         addPlayerButton = playersLayout.findViewById((R.id.btn_add_player));
         addPlayerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,8 +55,9 @@ public class PlayersFragment extends Fragment {
             }
         });
 
-        tempEditPlayerButton = playersLayout.findViewById(R.id.temp_edit_player_button);
+        context = this.getContext();
 
+        tempEditPlayerButton = playersLayout.findViewById(R.id.temp_edit_player_button);
         tempEditPlayerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,11 +66,17 @@ public class PlayersFragment extends Fragment {
         });
 
         recyclerView = playersLayout.findViewById(R.id.recyclerView);
-
-        PlayerLIstAdapter adapter = new PlayerLIstAdapter(this.getContext(), playerNames, playerTypes);
-        recyclerView.setAdapter(adapter);
+        adapter = new PlayerLIstAdapter(this.getContext(), playersList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        database = FirebaseDatabase.getInstance().getReference();
+
+        playersList = new ArrayList<>();
+        ClearData();
+        getPlayers();
+
         return playersLayout;
+
+
     }
 
     public void openAddPlayerDialog() {
@@ -76,5 +93,46 @@ public class PlayersFragment extends Fragment {
         EditPlayerDialog editPlayerDialog = new EditPlayerDialog();
         editPlayerDialog.show(getFragmentManager(), "Edit Player Dialog");
     }
+
+    private void getPlayers(){
+        Query query = database.child("teams").child("jets").child("members");
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot member : snapshot.getChildren()){
+                    Player player = new Player();
+                    player.playerName = member.child("playerName").getValue().toString();
+                    player.playerType = member.child("playerType").getValue().toString();
+
+                    playersList.add(player);
+                }
+
+                adapter = new PlayerLIstAdapter(context, playersList);
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    private void ClearData(){
+        if (playersList != null)
+        {
+            playersList.clear();
+
+            if (adapter != null)
+            {
+                adapter.notifyDataSetChanged();
+            }
+        }
+
+        playersList = new ArrayList<>();
+    }
+
 
 }
