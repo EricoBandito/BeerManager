@@ -16,6 +16,8 @@
     <string name="str_owner_explaination"><b>Owner:</b> An owner may do all tasks including adding and removing managers. There can only be one owner at a time..</string>
     <string name="str_manager_explaination"><b>Manager:</b> A manager may process ticket purchases and manage beer sales.</string>
     <string name="str_player_explaination"><b>Player:</b> A player may not execute any tasks. They are simple someone on your team that drinks beers.</string>
+    <string name="str_delete_verification">Are you sure you want to delete {player} from the player list?</string>
+    <string name="str_delete_beercount">{player} has {beercount} unused beers remaining</string>
 
     <string-array name="players">
         <item>Alex Anspikian</item>

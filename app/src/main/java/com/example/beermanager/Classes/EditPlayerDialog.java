@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.example.beermanager.DeletePlayerDialog;
 import com.example.beermanager.R;
 
 import androidx.appcompat.app.AlertDialog;
@@ -18,7 +19,7 @@ public class EditPlayerDialog extends AppCompatDialogFragment {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 //        Change "add_player_dialog" name.
-        View view = inflater.inflate(R.layout.add_player_dialog, null);
+        View view = inflater.inflate(R.layout.edit_player_dialog, null);
 
         dialogBuilder
                 .setView(view)
@@ -35,7 +36,15 @@ public class EditPlayerDialog extends AppCompatDialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
+                })
+                .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DeletePlayerDialog deletePlayerDialog = new DeletePlayerDialog();
+                        deletePlayerDialog.show(getFragmentManager(), "Delete Player Dialog");
+                    }
                 });
+
 
         return  dialogBuilder.create();
 

@@ -40,6 +40,8 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEdi
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View playersLayout = inflater.inflate(R.layout.fragment_players,container,false);
 
+        context = this.getContext();
+
         ImageView typeInfo = playersLayout.findViewById(R.id.img_type_info);
         typeInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,19 +58,10 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEdi
             }
         });
 
-        context = this.getContext();
-
-        tempEditPlayerButton = playersLayout.findViewById(R.id.temp_edit_player_button);
-        tempEditPlayerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openEditPlayerDialog();
-            }
-        });
-
         recyclerView = playersLayout.findViewById(R.id.recyclerView);
         adapter = new PlayerListAdapter(context, playersList, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
         database = FirebaseDatabase.getInstance().getReference();
 
         playersList = new ArrayList<>();
