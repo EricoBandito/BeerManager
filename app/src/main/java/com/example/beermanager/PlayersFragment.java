@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class PlayersFragment extends Fragment {
+public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEditListener {
     private Button addPlayerButton;
     private Button tempEditPlayerButton;
     RecyclerView recyclerView;
@@ -33,6 +33,7 @@ public class PlayersFragment extends Fragment {
     private DatabaseReference database;
     private   PlayerListAdapter adapter;
     private Context context;
+    private PlayersFragment playersFragment = this;
 
     @Nullable
     @Override
@@ -66,7 +67,7 @@ public class PlayersFragment extends Fragment {
         });
 
         recyclerView = playersLayout.findViewById(R.id.recyclerView);
-        adapter = new PlayerListAdapter(this.getContext(), playersList);
+        adapter = new PlayerListAdapter(context, playersList, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         database = FirebaseDatabase.getInstance().getReference();
 
@@ -107,7 +108,7 @@ public class PlayersFragment extends Fragment {
                     playersList.add(player);
                 }
 
-                adapter = new PlayerListAdapter(context, playersList);
+                adapter = new PlayerListAdapter(context, playersList, playersFragment);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
@@ -132,5 +133,8 @@ public class PlayersFragment extends Fragment {
         playersList = new ArrayList<>();
     }
 
-
+    @Override
+    public void onEditClick(int position) {
+        openEditPlayerDialog();
+    }
 }
