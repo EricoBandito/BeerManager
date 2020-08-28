@@ -1,4 +1,15 @@
 <resources>
+    <string-array name="members">
+        <item>Eric Gagne</item>
+        <item>Dom Allard</item>
+        <item>Alex Anspikian</item>
+    </string-array>
+    <string-array name="counts">
+        <item>5</item>
+        <item>-1</item>
+        <item>0</item>
+    </string-array>
+
     <string name="app_name">BeerManager</string>
     <string name="nav_beer">Beer</string>
     <string name="nav_players">Players</string>
