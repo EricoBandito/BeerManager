@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.example.beermanager.Adapters.PlayerLIstAdapter;
+import com.example.beermanager.Adapters.PlayerListAdapter;
 import com.example.beermanager.Classes.EditPlayerDialog;
 import com.example.beermanager.Classes.Player;
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +31,7 @@ public class PlayersFragment extends Fragment {
     RecyclerView recyclerView;
     private ArrayList<Player> playersList;
     private DatabaseReference database;
-    private   PlayerLIstAdapter adapter;
+    private   PlayerListAdapter adapter;
     private Context context;
 
     @Nullable
@@ -66,8 +66,8 @@ public class PlayersFragment extends Fragment {
         });
 
         recyclerView = playersLayout.findViewById(R.id.recyclerView);
-        adapter = new PlayerLIstAdapter(this.getContext(), playersList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        adapter = new PlayerListAdapter(this.getContext(), playersList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
         database = FirebaseDatabase.getInstance().getReference();
 
         playersList = new ArrayList<>();
@@ -107,11 +107,9 @@ public class PlayersFragment extends Fragment {
                     playersList.add(player);
                 }
 
-                adapter = new PlayerLIstAdapter(context, playersList);
+                adapter = new PlayerListAdapter(context, playersList);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-
-
             }
 
             @Override

@@ -13,11 +13,11 @@ import com.example.beermanager.R;
 
 import java.util.ArrayList;
 
-public class PlayerLIstAdapter extends RecyclerView.Adapter<PlayerLIstAdapter.MyViewHolder> {
+public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.MyViewHolder> {
     ArrayList<Player> _playersList;
     private Context context;
 
-    public PlayerLIstAdapter(Context ct, ArrayList<Player> playersList){
+    public PlayerListAdapter(Context ct, ArrayList<Player> playersList){
         context = ct;
         _playersList = playersList;
 
