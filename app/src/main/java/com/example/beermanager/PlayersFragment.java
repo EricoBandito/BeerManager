@@ -27,11 +27,10 @@ import java.util.ArrayList;
 
 public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEditListener {
     private Button addPlayerButton;
-    private Button tempEditPlayerButton;
     RecyclerView recyclerView;
     private ArrayList<Player> playersList;
     private DatabaseReference database;
-    private   PlayerListAdapter adapter;
+    private PlayerListAdapter adapter;
     private Context context;
     private PlayersFragment playersFragment = this;
 
@@ -69,8 +68,6 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEdi
         getPlayers();
 
         return playersLayout;
-
-
     }
 
     public void openAddPlayerDialog() {
@@ -90,14 +87,14 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEdi
 
     private void getPlayers(){
         Query query = database.child("teams").child("jets").child("members");
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        //TODO Change to addChildEventListener
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ClearData();
                 for(DataSnapshot member : snapshot.getChildren()){
-                    Player player = new Player();
-                    player.playerName = member.child("playerName").getValue().toString();
-                    player.playerType = member.child("playerType").getValue().toString();
-
+                    Player player = member.getValue(Player.class);
                     playersList.add(player);
                 }
 
