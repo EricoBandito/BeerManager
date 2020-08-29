@@ -80,7 +80,7 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEdi
         playerTypeInfoDialog.show(getFragmentManager(), "Player Type Info Dialog");
     }
 
-    public void openEditPlayerDialog() {
+    public void openEditPlayerDialog(Player player) {
         EditPlayerDialog editPlayerDialog = new EditPlayerDialog();
         editPlayerDialog.show(getFragmentManager(), "Edit Player Dialog");
     }
@@ -125,6 +125,6 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEdi
 
     @Override
     public void onEditClick(int position) {
-        openEditPlayerDialog();
+        openEditPlayerDialog(playersList.get(position));
     }
 }
