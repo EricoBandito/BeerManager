@@ -34,8 +34,8 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.My
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        myViewHolder.playerName.setText(_playersList.get(i).playerName);
-        myViewHolder.playerType.setText(_playersList.get(i).playerType);
+        myViewHolder.playerName.setText(_playersList.get(i).getPlayerName());
+        myViewHolder.playerType.setText(_playersList.get(i).getPlayerType());
     }
 
     @Override

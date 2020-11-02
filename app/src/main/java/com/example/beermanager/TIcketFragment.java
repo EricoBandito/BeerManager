@@ -66,14 +66,13 @@ public class TIcketFragment extends Fragment {
     }
 
     private void setupAdapter() {
-        adapter = new ArrayAdapter<Player>(getContext(), android.R.layout.simple_spinner_item, playersList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.addAll(playersList);
         playersSpinner.setAdapter(adapter);
     }
 
     private void ClearData(){
-        if (playersList != null)
-        {
+
+        if (playersList != null) {
             playersList.clear();
 
             if (adapter != null)

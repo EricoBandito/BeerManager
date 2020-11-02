@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +28,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEditListener {
-    private Button addPlayerButton;
     RecyclerView recyclerView;
     private ArrayList<Player> playersList;
     private DatabaseReference database;
-    private PlayerListAdapter adapter;
+    private PlayerListAdapter playerListAdapter;
     private Context context;
     private PlayersFragment playersFragment = this;
 
@@ -38,18 +39,20 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEdi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View playersLayout = inflater.inflate(R.layout.fragment_players,container,false);
-
         context = this.getContext();
 
         ImageView typeInfo = playersLayout.findViewById(R.id.img_type_info);
+        Button addPlayerButton = playersLayout.findViewById((R.id.btn_add_player));
+        recyclerView = playersLayout.findViewById(R.id.recyclerView);
+        database = FirebaseDatabase.getInstance().getReference();
+        playersList = new ArrayList<>();
+
         typeInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openPlayerTypeInfoDialog();
             }
         });
-
-        addPlayerButton = playersLayout.findViewById((R.id.btn_add_player));
         addPlayerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,34 +60,21 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEdi
             }
         });
 
-        recyclerView = playersLayout.findViewById(R.id.recyclerView);
-        adapter = new PlayerListAdapter(context, playersList, this);
+        playerListAdapter = new PlayerListAdapter(context, playersList, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        database = FirebaseDatabase.getInstance().getReference();
-
-        playersList = new ArrayList<>();
-        ClearData();
         getPlayers();
 
         return playersLayout;
     }
 
-    public void openAddPlayerDialog() {
-        AddPlayerDialog addPlayerDialog = new AddPlayerDialog();
-        addPlayerDialog.show(getFragmentManager(), "Add Player Dialog");
-    }
+    @Override
+    public void onResume() {
+        super.onResume();
 
-    public void openPlayerTypeInfoDialog() {
-        PlayerTypeInfoDialog playerTypeInfoDialog = new PlayerTypeInfoDialog();
-        playerTypeInfoDialog.show(getFragmentManager(), "Player Type Info Dialog");
+        getPlayers();
     }
-
-    public void openEditPlayerDialog(Player player) {
-        EditPlayerDialog editPlayerDialog = new EditPlayerDialog();
-        editPlayerDialog.show(getFragmentManager(), "Edit Player Dialog");
-    }
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
     private void getPlayers(){
         Query query = database.child("teams").child("jets").child("members");
 
@@ -93,14 +83,15 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEdi
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ClearData();
+
                 for(DataSnapshot member : snapshot.getChildren()){
                     Player player = member.getValue(Player.class);
                     playersList.add(player);
                 }
 
-                adapter = new PlayerListAdapter(context, playersList, playersFragment);
-                recyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                playerListAdapter = new PlayerListAdapter(context, playersList, playersFragment);
+                recyclerView.setAdapter(playerListAdapter);
+                playerListAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -109,18 +100,34 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEdi
             }
         });
     }
+
     private void ClearData(){
         if (playersList != null)
         {
             playersList.clear();
 
-            if (adapter != null)
+            if (playerListAdapter != null)
             {
-                adapter.notifyDataSetChanged();
+                playerListAdapter.notifyDataSetChanged();
             }
         }
 
         playersList = new ArrayList<>();
+    }
+
+    private void openAddPlayerDialog() {
+        AddPlayerDialog addPlayerDialog = new AddPlayerDialog();
+        addPlayerDialog.show(getFragmentManager(), "Add Player Dialog");
+    }
+
+    private void openPlayerTypeInfoDialog() {
+        PlayerTypeInfoDialog playerTypeInfoDialog = new PlayerTypeInfoDialog();
+        playerTypeInfoDialog.show(getFragmentManager(), "Player Type Info Dialog");
+    }
+
+    private void openEditPlayerDialog(Player player) {
+        EditPlayerDialog editPlayerDialog = new EditPlayerDialog(player);
+        editPlayerDialog.show(getFragmentManager(), "Edit Player Dialog");
     }
 
     @Override

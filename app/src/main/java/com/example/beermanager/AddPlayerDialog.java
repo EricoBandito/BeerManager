@@ -12,6 +12,9 @@ import android.widget.RadioGroup;
 import com.example.beermanager.Classes.Player;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.UUID;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
@@ -57,7 +60,8 @@ public class AddPlayerDialog extends AppCompatDialogFragment {
         RadioButton selectedRadioButton = view.findViewById(selectedRadioId);
         String playerType = selectedRadioButton.getText().toString();
 
-        return new Player(playerName, playerType);
+        String uniqueID = UUID.randomUUID().toString();
+        return new Player(uniqueID, playerName, playerType);
     }
 
     private void addPlayertoDatabase(Player player)
@@ -65,6 +69,11 @@ public class AddPlayerDialog extends AppCompatDialogFragment {
         database = FirebaseDatabase.getInstance().getReference();
         //TODO Reference the correct team when entering into database.
         DatabaseReference membersRef = database.child("teams").child("jets").child("members");
-        membersRef.push().setValue(player);
+
+        membersRef.child(player.getId()).setValue(player);
+
+
+
+
     }
 }
