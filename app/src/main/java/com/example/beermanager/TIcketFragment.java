@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import com.example.beermanager.Adapters.PlayerListAdapter;
@@ -16,7 +17,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -42,7 +45,45 @@ public class TIcketFragment extends Fragment {
         ClearData();
         getPlayers();
 
+        final Spinner playerSpinner = ticketsLayout.findViewById(R.id.spn_players);
+
+        Button buyTicketButton = ticketsLayout.findViewById(R.id.btn_buy_ticket);
+        
+        buyTicketButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Player selectedPlayer = adapter.getItem(playerSpinner.getSelectedItemPosition());
+                addTicket(selectedPlayer);
+            }
+        });
+
         return ticketsLayout;
+    }
+
+    private void addTicket(Player player) {
+        DatabaseReference beerCountRef =
+                database.child("teams")
+                        .child("jets")
+                        .child("members")
+                        .child(player.getId())
+                        .child("beerCount");
+
+        beerCountRef.runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                int value = currentData.getValue(Integer.class);
+                currentData.setValue(value + 8);
+
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(@androidx.annotation.Nullable DatabaseError error, boolean committed, @androidx.annotation.Nullable DataSnapshot currentData) {
+
+            }
+        });
+
     }
 
     private void getPlayers(){

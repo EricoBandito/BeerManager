@@ -2,9 +2,11 @@ package com.example.beermanager;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.beermanager.Classes.Player;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +28,14 @@ public class DeletePlayerDialog extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.delete_player_dialog, null);
 
+        Resources res = getResources();
+
+        TextView deletePlayer = view.findViewById(R.id.txt_delete_verification);
+        deletePlayer.setText(String.format(res.getString(R.string.str_delete_verification), player.getPlayerName()));
+
+        TextView beerCountWarning = view.findViewById(R.id.beer_remaining_warning);
+        beerCountWarning.setText(res.getQuantityString(R.plurals.str_delete_beercount, player.getBeerCount(), player.getPlayerName(), player.getBeerCount()));
+
         dialogBuilder
                 .setView(view)
                 .setTitle("Delete Player")
@@ -40,6 +50,7 @@ public class DeletePlayerDialog extends AppCompatDialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
                         DatabaseReference membersRef = database.child("teams").child("jets").child("members");
+                        membersRef.child(player.getId()).removeValue();
                     }
                 });
 

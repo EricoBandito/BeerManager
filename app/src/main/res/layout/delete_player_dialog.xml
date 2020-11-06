@@ -20,10 +20,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/beer_remaining_warning"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/str_delete_beercount"
+        android:text="placeholder"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="@+id/txt_delete_verification"
         app:layout_constraintStart_toStartOf="@+id/txt_delete_verification"

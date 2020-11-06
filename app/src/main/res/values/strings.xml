@@ -1,15 +1,4 @@
 <resources>
-    <string-array name="members">
-        <item>Eric Gagne</item>
-        <item>Dom Allard</item>
-        <item>Alex Anspikian</item>
-    </string-array>
-    <string-array name="counts">
-        <item>5</item>
-        <item>-1</item>
-        <item>0</item>
-    </string-array>
-
     <string name="app_name">BeerManager</string>
     <string name="nav_beer">Beer</string>
     <string name="nav_players">Players</string>
@@ -27,8 +16,13 @@
     <string name="str_owner_explaination"><b>Owner:</b> An owner may do all tasks including adding and removing managers. There can only be one owner at a time..</string>
     <string name="str_manager_explaination"><b>Manager:</b> A manager may process ticket purchases and manage beer sales.</string>
     <string name="str_player_explaination"><b>Player:</b> A player may not execute any tasks. They are simple someone on your team that drinks beers.</string>
-    <string name="str_delete_verification">Are you sure you want to delete {player} from the player list?</string>
-    <string name="str_delete_beercount">{player} has {beercount} unused beers remaining</string>
+    <string name="str_delete_verification">Are you sure you want to delete %1$s from the player list?</string>
+    <string name="btn_buy_ticket">Buy Ticket</string>
+
+    <plurals name="str_delete_beercount">
+        <item quantity="one">%1$s has %2$d beer remaining.</item>
+        <item quantity="other">%1$s has %2$d beers remaining.</item>
+    </plurals>
 
     <string-array name="players">
         <item>Alex Anspikian</item>
@@ -36,6 +30,8 @@
         <item>Eric Gagne</item>
         <item>Dominic Allard</item>
     </string-array>
+
+
 
     <string-array name="types">
         <item>Manager</item>

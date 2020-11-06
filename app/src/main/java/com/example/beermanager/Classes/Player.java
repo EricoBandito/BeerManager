@@ -10,6 +10,7 @@ public class Player {
     private String playerName;
     private String playerType;
     private String id = null;
+    private int beerCount = 0;
 
     public Player(){}
 
@@ -19,7 +20,14 @@ public class Player {
         this.id = id;
     }
 
+    public void modifyBeerCount(int value)
+    {
+        beerCount += value;
+    }
 
+    public int getBeerCount() {
+        return this.beerCount;
+    }
 
     public String getId() {
         return id;

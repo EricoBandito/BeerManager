@@ -6,21 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.beermanager.Classes.Player;
 import com.example.beermanager.R;
+
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class BeerCountListAdapter extends RecyclerView.Adapter <BeerCountListAdapter.MyViewHolder> {
 
-    private String mMembers[], mCounts[];
     private Context mContext;
+    private ArrayList<Player> players;
 
-    public BeerCountListAdapter(Context context, String members[], String counts[])
+    public BeerCountListAdapter(Context context, ArrayList<Player> players)
     {
-        mMembers = members;
-        mCounts = counts;
-        mContext = context;
+        this.players = players;
+        this.mContext = context;
     }
 
     @NonNull
@@ -34,13 +36,13 @@ public class BeerCountListAdapter extends RecyclerView.Adapter <BeerCountListAda
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.player.setText(mMembers[position]);
-        holder.count.setText(mCounts[position]);
+        holder.player.setText(players.get(position).getPlayerName());
+        holder.count.setText(String.valueOf(players.get(position).getBeerCount()));
     }
 
     @Override
     public int getItemCount() {
-        return mMembers.length;
+        return players.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
