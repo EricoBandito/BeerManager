@@ -1,5 +1,8 @@
 package com.example.beermanager;
 
+import android.view.LayoutInflater;
+import android.view.View;
+
 import java.util.ArrayList;
 
 import androidx.recyclerview.widget.RecyclerView;

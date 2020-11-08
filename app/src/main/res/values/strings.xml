@@ -19,6 +19,7 @@
     <string name="str_delete_verification">Are you sure you want to delete %1$s from the player list?</string>
     <string name="btn_buy_ticket">Buy Ticket</string>
 
+    <string name="str_delete_beercount">%1$s has no beer remaining.</string>
     <plurals name="str_delete_beercount">
         <item quantity="one">%1$s has %2$d beer remaining.</item>
         <item quantity="other">%1$s has %2$d beers remaining.</item>

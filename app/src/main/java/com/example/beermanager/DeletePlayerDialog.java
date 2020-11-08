@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 public class DeletePlayerDialog extends AppCompatDialogFragment {
+
     private Player player;
     public DeletePlayerDialog(Player player)
     {
@@ -25,17 +26,31 @@ public class DeletePlayerDialog extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.delete_player_dialog, null);
 
-        Resources res = getResources();
+        populateTextviews(view);
 
+        return buildDialog(dialogBuilder, view);
+    }
+
+    private void populateTextviews(View view) {
+        Resources res = getResources();
         TextView deletePlayer = view.findViewById(R.id.txt_delete_verification);
         deletePlayer.setText(String.format(res.getString(R.string.str_delete_verification), player.getPlayerName()));
 
         TextView beerCountWarning = view.findViewById(R.id.beer_remaining_warning);
-        beerCountWarning.setText(res.getQuantityString(R.plurals.str_delete_beercount, player.getBeerCount(), player.getPlayerName(), player.getBeerCount()));
 
+        if (player.getBeerCount() == 0) {
+            beerCountWarning.setText(res.getString(R.string.str_delete_beercount, player.getPlayerName()));
+        }
+        else {
+            beerCountWarning.setText(res.getQuantityString(R.plurals.str_delete_beercount , player.getBeerCount(), player.getPlayerName(), player.getBeerCount()));
+        }
+    }
+
+    private Dialog buildDialog(AlertDialog.Builder dialogBuilder, View view) {
         dialogBuilder
                 .setView(view)
                 .setTitle("Delete Player")
@@ -48,13 +63,17 @@ public class DeletePlayerDialog extends AppCompatDialogFragment {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-                        DatabaseReference membersRef = database.child("teams").child("jets").child("members");
-                        membersRef.child(player.getId()).removeValue();
+                        deletePlayer();
                     }
                 });
 
         return dialogBuilder.create();
+    }
+
+    private void deletePlayer() {
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference membersRef = database.child("teams").child("jets").child("members");
+        membersRef.child(player.getId()).removeValue();
     }
 
 
