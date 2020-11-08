@@ -28,51 +28,48 @@ import androidx.recyclerview.widget.RecyclerView;
 public class BeerFragment extends Fragment {
     @Nullable
 
-    private String mMembers[], mCounts[];
     private RecyclerView recyclerView;
     private Context context;
-    private DatabaseReference database;
     private ArrayList<Player> playersList;
     private BeerCountListAdapter beerCountListAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View beersLayout = inflater.inflate(R.layout.fragment_beer,container,false);
-        context = this.getContext();
 
-        database = FirebaseDatabase.getInstance().getReference();
-        playersList = new ArrayList<>();
-
-        recyclerView = beersLayout.findViewById(R.id.recyclerView);
-
-        beerCountListAdapter = new BeerCountListAdapter(context, playersList);
+        assignInstanceVariables(beersLayout);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         getPlayers();
 
         return beersLayout;
+    }
 
-
-
+    private void assignInstanceVariables(View beersLayout) {
+        context = this.getContext();
+        playersList = new ArrayList<>();
+        recyclerView = beersLayout.findViewById(R.id.recyclerView);
+        beerCountListAdapter = new BeerCountListAdapter(context, playersList);
     }
 
     private void getPlayers(){
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query query = database.child("teams").child("jets").child("members");
 
         //TODO Change to addChildEventListener
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ClearData();
+                Helper.clearData(playersList, beerCountListAdapter);
 
                 for(DataSnapshot member : snapshot.getChildren()){
                     Player player = member.getValue(Player.class);
                     playersList.add(player);
                 }
 
-                beerCountListAdapter = new BeerCountListAdapter(context, playersList);
-                recyclerView.setAdapter(beerCountListAdapter);
                 beerCountListAdapter.notifyDataSetChanged();
+                recyclerView.setAdapter(beerCountListAdapter);
+
             }
 
             @Override
@@ -80,19 +77,5 @@ public class BeerFragment extends Fragment {
 
             }
         });
-    }
-
-    private void ClearData(){
-        if (playersList != null)
-        {
-            playersList.clear();
-
-            if (beerCountListAdapter != null)
-            {
-                beerCountListAdapter.notifyDataSetChanged();
-            }
-        }
-
-        playersList = new ArrayList<>();
     }
 }
