@@ -20,9 +20,6 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 public class AddPlayerDialog extends AppCompatDialogFragment {
 
-    private EditText editTextName;
-    private RadioGroup radioGroup;
-    private DatabaseReference database;
     private View view;
 
     @Override
@@ -31,6 +28,10 @@ public class AddPlayerDialog extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.add_player_dialog, null);
 
+        return buildDialog(dialogBuilder);
+    }
+
+    private Dialog buildDialog(AlertDialog.Builder dialogBuilder) {
         dialogBuilder
                 .setView(view)
                 .setTitle("Add Player")
@@ -52,10 +53,10 @@ public class AddPlayerDialog extends AppCompatDialogFragment {
     }
 
     private Player createPlayer(){
-        editTextName = view.findViewById(R.id.et_name);
+        EditText editTextName = view.findViewById(R.id.et_name);
         String playerName = editTextName.getText().toString();
 
-        radioGroup = view.findViewById(R.id.radioGroup);
+        RadioGroup radioGroup = view.findViewById(R.id.radioGroup);
         int selectedRadioId = radioGroup.getCheckedRadioButtonId();
         RadioButton selectedRadioButton = view.findViewById(selectedRadioId);
         String playerType = selectedRadioButton.getText().toString();
@@ -66,14 +67,10 @@ public class AddPlayerDialog extends AppCompatDialogFragment {
 
     private void addPlayertoDatabase(Player player)
     {
-        database = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         //TODO Reference the correct team when entering into database.
         DatabaseReference membersRef = database.child("teams").child("jets").child("members");
 
         membersRef.child(player.getId()).setValue(player);
-
-
-
-
     }
 }
