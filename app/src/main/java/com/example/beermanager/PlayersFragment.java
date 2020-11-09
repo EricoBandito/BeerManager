@@ -30,37 +30,19 @@ import java.util.ArrayList;
 public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEditListener {
     RecyclerView recyclerView;
     private ArrayList<Player> playersList;
-    private DatabaseReference database;
     private PlayerListAdapter playerListAdapter;
     private Context context;
     private PlayersFragment playersFragment = this;
+
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View playersLayout = inflater.inflate(R.layout.fragment_players,container,false);
-        context = this.getContext();
 
-        ImageView typeInfo = playersLayout.findViewById(R.id.img_type_info);
-        Button addPlayerButton = playersLayout.findViewById((R.id.btn_add_player));
-        recyclerView = playersLayout.findViewById(R.id.recyclerView);
-        database = FirebaseDatabase.getInstance().getReference();
-        playersList = new ArrayList<>();
-
-        typeInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openPlayerTypeInfoDialog();
-            }
-        });
-        addPlayerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openAddPlayerDialog();
-            }
-        });
-
-        playerListAdapter = new PlayerListAdapter(context, playersList, this);
+        assignInstanceVariables(playersLayout);
+        setOnClickListeners(playersLayout);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         getPlayers();
@@ -68,30 +50,50 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEdi
         return playersLayout;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        getPlayers();
+    private void assignInstanceVariables(View playersLayout) {
+        context = this.getContext();
+        recyclerView = playersLayout.findViewById(R.id.recyclerView);
+        playersList = new ArrayList<>();
+        playerListAdapter = new PlayerListAdapter(context, playersList, playersFragment);
     }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+
+    private void setOnClickListeners(View view) {
+        ImageView typeInfo = view.findViewById(R.id.img_type_info);
+        typeInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPlayerTypeInfoDialog();
+            }
+        });
+
+        Button addPlayerButton = view.findViewById((R.id.btn_add_player));
+        addPlayerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAddPlayerDialog();
+            }
+        });
+    }
+
+
+
     private void getPlayers(){
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
         Query query = database.child("teams").child("jets").child("members");
 
         //TODO Change to addChildEventListener
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ClearData();
+                Helper.clearData(playersList, playerListAdapter);
 
                 for(DataSnapshot member : snapshot.getChildren()){
                     Player player = member.getValue(Player.class);
                     playersList.add(player);
                 }
 
-                playerListAdapter = new PlayerListAdapter(context, playersList, playersFragment);
-                recyclerView.setAdapter(playerListAdapter);
                 playerListAdapter.notifyDataSetChanged();
+                recyclerView.setAdapter(playerListAdapter);
             }
 
             @Override
@@ -99,20 +101,6 @@ public class PlayersFragment extends Fragment implements PlayerListAdapter.OnEdi
 
             }
         });
-    }
-
-    private void ClearData(){
-        if (playersList != null)
-        {
-            playersList.clear();
-
-            if (playerListAdapter != null)
-            {
-                playerListAdapter.notifyDataSetChanged();
-            }
-        }
-
-        playersList = new ArrayList<>();
     }
 
     private void openAddPlayerDialog() {
